@@ -1,21 +1,28 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
-import Loading from '@/components/Loading';
+import React, { useState } from 'react';
+import ErrorMessage from '@/components/ErrorMessage';
 
 const TestPage = () => {
-  const [isLoading, setIsLoading] = useState(true);
+  const [hasError, setHasError] = useState(true);
 
-  useEffect(() => {
-    // Simular carga de 3 segundos
-    const timer = setTimeout(() => setIsLoading(false), 3000);
-    return () => clearTimeout(timer);
-  }, []);
+  const handleRetry = () => {
+    alert('Intentando nuevamente...');
+    setHasError(false); // Simula que el error se resolvió
+  };
 
   return (
-    <div className="p-8">
-      <h1 className="text-2xl font-bold mb-4">Prueba de Loading</h1>
-      {isLoading ? <Loading /> : <p>Datos cargados correctamente 🎉</p>}
+    <div className="p-8 space-y-4">
+      <h1 className="text-2xl font-bold">Prueba de ErrorMessage</h1>
+
+      {hasError ? (
+        <ErrorMessage
+          message="No se pudieron cargar los datos. Inténtalo nuevamente."
+          onRetry={handleRetry}
+        />
+      ) : (
+        <p className="text-green-600">Datos cargados correctamente 🎉</p>
+      )}
     </div>
   );
 };
