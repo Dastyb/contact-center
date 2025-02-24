@@ -1,47 +1,21 @@
 "use client";
 
-import React, { useState } from 'react';
-import FilterBar from '@/components/FilterBar';
-import AgentCard from '@/components/AgentCard';
+import React, { useState, useEffect } from 'react';
+import Loading from '@/components/Loading';
 
 const TestPage = () => {
-  const [filters, setFilters] = useState<{ status?: string; waitTime?: number }>({});
+  const [isLoading, setIsLoading] = useState(true);
 
-  const agents = [
-    { name: 'Juan Pérez', status: 'disponible', waitTime: 2 },
-    { name: 'Ana Gómez', status: 'en llamada', waitTime: 5 },
-    { name: 'Carlos Ruiz', status: 'pausa', waitTime: 3 },
-  ];
-
-  // Filtrar la lista según los parámetros seleccionados
-  const filteredAgents = agents.filter((agent) => {
-    const matchesStatus = filters.status ? agent.status === filters.status : true;
-    const matchesWaitTime = filters.waitTime ? agent.waitTime <= filters.waitTime : true;
-    return matchesStatus && matchesWaitTime;
-  });
+  useEffect(() => {
+    // Simular carga de 3 segundos
+    const timer = setTimeout(() => setIsLoading(false), 3000);
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
-    <div className="p-8 space-y-4">
-      <h1 className="text-2xl font-bold">Prueba de Filtro</h1>
-
-      {/* Componente de Filtros */}
-      <FilterBar onFilterChange={setFilters} />
-
-      {/* Lista de Agentes Filtrados */}
-      <div className="space-y-2">
-        {filteredAgents.length > 0 ? (
-          filteredAgents.map((agent, index) => (
-            <AgentCard
-              key={index}
-              name={agent.name}
-              status={agent.status as 'disponible' | 'en llamada' | 'pausa'}
-              waitTime={`${agent.waitTime} minutos`}
-            />
-          ))
-        ) : (
-          <p>No hay agentes que coincidan con los filtros.</p>
-        )}
-      </div>
+    <div className="p-8">
+      <h1 className="text-2xl font-bold mb-4">Prueba de Loading</h1>
+      {isLoading ? <Loading /> : <p>Datos cargados correctamente 🎉</p>}
     </div>
   );
 };
