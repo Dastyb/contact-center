@@ -1,8 +1,8 @@
 {
   "agents": [
-    { "id": 1, "name": "Juan Pérez", "status": "disponible", "waitTime": 2 },
-    { "id": 2, "name": "Ana Gómez", "status": "en llamada", "waitTime": 5 },
-    { "id": 3, "name": "Carlos Ruiz", "status": "pausa", "waitTime": 3 }
+    { "id": 1, "name": "Juan Pérez", "status": "disponible" },
+    { "id": 2, "name": "Ana Gómez", "status": "en llamada" },
+    { "id": 3, "name": "Carlos Ruiz", "status": "pausa" }
   ],
   "clients": [
     { "id": 1, "name": "Pedro Ramírez", "waitTime": 3 },
