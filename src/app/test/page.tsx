@@ -1,26 +1,22 @@
 // src/app/test/page.tsx
 import React from 'react';
-import AgentCard from '@/components/AgentCard';
+import ClientCard from '@/components/ClientCard';
 
 const TestPage = () => {
-  const agents = [
-    { name: 'Juan Pérez', status: 'disponible', waitTime: '2 minutos' },
-    { name: 'Ana Gómez', status: 'en llamada', waitTime: '5 minutos' },
-    { name: 'Carlos Ruiz', status: 'pausa', waitTime: '3 minutos' },
+  const clients = [
+    { name: 'Pedro Ramírez', waitTime: 3 },
+    { name: 'María López', waitTime: 7 },
+    { name: 'Luis Torres', waitTime: 10 },
   ];
 
   return (
     <div className="p-8 space-y-4">
-      {agents.map((agent, index) => (
-        <AgentCard
-          key={index}
-          name={agent.name}
-          status={agent.status as 'disponible' | 'en llamada' | 'pausa'}
-          waitTime={agent.waitTime}
-        />
+      {clients.map((client, index) => (
+        <ClientCard key={index} name={client.name} waitTime={client.waitTime} />
       ))}
     </div>
   );
 };
 
 export default TestPage;
+
