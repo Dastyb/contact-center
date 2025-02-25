@@ -1,10 +1,10 @@
 import axios from 'axios';
 
-// Definición de interfaces para Agentes y Clientes
+// Interfaces para Agentes y Clientes
 export interface Agent {
   id: number;
   name: string;
-  status: 'disponible' | 'en llamada' | 'pausa';
+  status: 'disponible' | 'en llamada' | 'pausa' | 'desconocido';
 }
 
 export interface Client {
@@ -13,35 +13,26 @@ export interface Client {
   waitTime: number;
 }
 
-// URL base para el mockData.json
-const API_BASE_URL = '/mockData.json';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api';
 
-// Obtener la lista de agentes
+if (!API_BASE_URL) {
+  throw new Error('La variable NEXT_PUBLIC_API_URL no está configurada.');
+}
+
 export const getAgents = async (): Promise<Agent[]> => {
   try {
-    const response = await axios.get(API_BASE_URL);
-    const agents: Agent[] = response.data.agents.map((agent: any) => ({
-      id: agent.id,
-      name: agent.name,
-      status: agent.status,
-    }));
-    return agents;
+    const response = await axios.get(`${API_BASE_URL}/simulate`);
+    return response.data.agents;
   } catch (error) {
     console.error('Error al obtener los agentes:', error);
     throw error;
   }
 };
 
-// Obtener la lista de clientes
 export const getClients = async (): Promise<Client[]> => {
   try {
-    const response = await axios.get(API_BASE_URL);
-    const clients: Client[] = response.data.clients.map((client: any) => ({
-      id: client.id,
-      name: client.name,
-      waitTime: Number(client.waitTime), // Convertir a número para asegurar consistencia
-    }));
-    return clients;
+    const response = await axios.get(`${API_BASE_URL}/simulate`);
+    return response.data.clients;
   } catch (error) {
     console.error('Error al obtener los clientes:', error);
     throw error;
