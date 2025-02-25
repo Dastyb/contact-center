@@ -6,32 +6,14 @@ import FilterBar from '@/components/FilterBar';
 import Loading from '@/components/Loading';
 import ErrorMessage from '@/components/ErrorMessage';
 import { useSearchParams } from 'next/navigation';
+import { useAppContext } from '@/context/AppContext';
 
 const ClientsPage = () => {
   const searchParams = useSearchParams();
-  const [clients, setClients] = useState<any[]>([]);
-  const [filteredClients, setFilteredClients] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
+  const { clients, loading, error } = useAppContext();
+  const [filteredClients, setFilteredClients] = useState(clients);
 
-  useEffect(() => {
-    const fetchClients = async () => {
-      try {
-        const response = await fetch('/mockData.json');
-        if (!response.ok) throw new Error('Error al cargar datos');
-        const data = await response.json();
-        setClients(data.clients);
-        setFilteredClients(data.clients);
-      } catch (error) {
-        setError(true);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchClients();
-  }, []);
-
+  // Filtrar clientes según el parámetro de búsqueda
   useEffect(() => {
     const waitTime = searchParams.get('waitTime') ? parseInt(searchParams.get('waitTime')!) : undefined;
     const filtered = clients.filter((client) =>
