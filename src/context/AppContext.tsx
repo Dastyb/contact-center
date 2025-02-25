@@ -1,21 +1,8 @@
-// src/context/AppContext.tsx
 "use client";
 
 import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
-import { getAgents, getClients } from '@/services/api';
-
-// Definir el tipo de datos para agentes y clientes
-interface Agent {
-  id: number;
-  name: string;
-  status: string;
-}
-
-interface Client {
-  id: number;
-  name: string;
-  waitTime: number;
-}
+import { getAgents, getClients, Agent, Client } from '@/services/api';
+import { socket } from '@/services/socket';
 
 interface AppContextType {
   agents: Agent[];
@@ -24,17 +11,15 @@ interface AppContextType {
   error: string | null;
 }
 
-// Crear el contexto
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
-// Proveedor del contexto
 export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [agents, setAgents] = useState<Agent[]>([]);
   const [clients, setClients] = useState<Client[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Cargar datos desde la API Mock
+  // Cargar datos iniciales desde la API
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -52,6 +37,17 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     fetchData();
   }, []);
 
+  // Escuchar actualizaciones en tiempo real
+  useEffect(() => {
+    socket.on('updateAgents', setAgents);
+    socket.on('updateClients', setClients);
+
+    return () => {
+      socket.off('updateAgents');
+      socket.off('updateClients');
+    };
+  }, []);
+
   return (
     <AppContext.Provider value={{ agents, clients, loading, error }}>
       {children}
@@ -59,7 +55,6 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   );
 };
 
-// Hook para usar el contexto
 export const useAppContext = (): AppContextType => {
   const context = useContext(AppContext);
   if (!context) {
