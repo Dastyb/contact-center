@@ -13,11 +13,11 @@ const AgentsPage = () => {
   const { agents, loading, error } = useAppContext();
   const [filteredAgents, setFilteredAgents] = useState(agents);
 
-  // Filtrar agentes según el parámetro de búsqueda
+  // Filtrar agentes según el estado en la URL
   useEffect(() => {
     const status = searchParams.get('status');
     const filtered = agents.filter((agent) =>
-      status ? agent.status === status : true
+      status ? agent.status.toLowerCase() === status.toLowerCase() : true
     );
     setFilteredAgents(filtered);
   }, [searchParams, agents]);
@@ -28,8 +28,6 @@ const AgentsPage = () => {
   return (
     <div className="p-8">
       <h1 className="text-2xl font-bold mb-4">Lista de Agentes</h1>
-
-      {/* Filtro solo por estado */}
       <FilterBar filterType="agents" onFilterChange={() => {}} />
 
       <div className="space-y-4 mt-4">
