@@ -4,10 +4,11 @@ import React, { useState, useEffect } from 'react';
 import { useSearchParams, usePathname, useRouter } from 'next/navigation';
 
 type FilterBarProps = {
+  filterType: 'agents' | 'clients'; // Define si es para agentes o clientes
   onFilterChange: (filters: { status?: string; waitTime?: number }) => void;
 };
 
-const FilterBar: React.FC<FilterBarProps> = ({ onFilterChange }) => {
+const FilterBar: React.FC<FilterBarProps> = ({ filterType, onFilterChange }) => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
@@ -17,30 +18,18 @@ const FilterBar: React.FC<FilterBarProps> = ({ onFilterChange }) => {
     searchParams.get('waitTime') ? parseInt(searchParams.get('waitTime')!) : undefined
   );
 
-  // Actualizar la URL y aplicar filtros
+  // Aplicar filtros y actualizar la URL
   const applyFilters = () => {
-    const params = new URLSearchParams(searchParams);
+    const params = new URLSearchParams();
 
-    if (status) {
-      params.set('status', status);
-    } else {
-      params.delete('status');
-    }
+    if (filterType === 'agents' && status) params.set('status', status);
+    if (filterType === 'clients' && waitTime !== undefined) params.set('waitTime', waitTime.toString());
 
-    if (waitTime !== undefined && !isNaN(waitTime)) {
-      params.set('waitTime', waitTime.toString());
-    } else {
-      params.delete('waitTime');
-    }
-
-    // Actualizar la URL sin recargar la página
     router.push(`${pathname}?${params.toString()}`);
-
-    // Pasar los filtros actualizados al componente padre
     onFilterChange({ status, waitTime });
   };
 
-  // Limpiar filtros
+  // Limpiar filtros y resetear la URL
   const clearFilters = () => {
     setStatus('');
     setWaitTime(undefined);
@@ -50,40 +39,34 @@ const FilterBar: React.FC<FilterBarProps> = ({ onFilterChange }) => {
 
   return (
     <div className="flex items-center gap-4 p-4 bg-white rounded-lg shadow-md">
-      {/* Filtro por estado */}
-      <select
-        className="border p-2 rounded w-40"
-        value={status}
-        onChange={(e) => setStatus(e.target.value)}
-      >
-        <option value="">Todos los estados</option>
-        <option value="disponible">Disponible</option>
-        <option value="en llamada">En llamada</option>
-        <option value="pausa">Pausa</option>
-      </select>
+      {filterType === 'agents' && (
+        <select
+          className="border p-2 rounded w-40"
+          value={status}
+          onChange={(e) => setStatus(e.target.value)}
+        >
+          <option value="">Todos los estados</option>
+          <option value="disponible">Disponible</option>
+          <option value="en llamada">En llamada</option>
+          <option value="pausa">Pausa</option>
+        </select>
+      )}
 
-      {/* Filtro por tiempo de espera */}
-      <input
-        type="number"
-        placeholder="Tiempo de espera (min)"
-        className="border p-2 rounded w-40"
-        value={waitTime ?? ''}
-        onChange={(e) => setWaitTime(e.target.value ? parseInt(e.target.value) : undefined)}
-      />
+      {filterType === 'clients' && (
+        <input
+          type="number"
+          placeholder="Tiempo de espera (min)"
+          className="border p-2 rounded w-40"
+          value={waitTime ?? ''}
+          onChange={(e) => setWaitTime(e.target.value ? parseInt(e.target.value) : undefined)}
+        />
+      )}
 
-      {/* Botón de aplicar filtros */}
-      <button
-        onClick={applyFilters}
-        className="bg-blue-500 text-white px-4 py-2 rounded"
-      >
+      <button onClick={applyFilters} className="bg-blue-500 text-white px-4 py-2 rounded">
         Aplicar Filtros
       </button>
 
-      {/* Botón de limpiar filtros */}
-      <button
-        onClick={clearFilters}
-        className="bg-gray-300 px-4 py-2 rounded"
-      >
+      <button onClick={clearFilters} className="bg-gray-300 px-4 py-2 rounded">
         Limpiar
       </button>
     </div>
