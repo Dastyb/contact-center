@@ -3,11 +3,11 @@ import React from 'react';
 
 type ClientCardProps = {
   name: string;
-  waitTime: number; // Tiempo de espera en minutos
+  waitTime: number; 
 };
 
 const ClientCard: React.FC<ClientCardProps> = ({ name, waitTime }) => {
-  // Determinar si el tiempo de espera supera los 5 minutos
+  // tiempo espera mayor a 5 minutos
   const isDelayed = waitTime > 5;
 
   return (
