@@ -13,31 +13,31 @@ Este proyecto es un **dashboard en tiempo real de un contact center** para gesti
 
 ## Instalación y Configuración  
 
-### **1️⃣ Requisitos previos**  
+### **1. Requisitos previos**   
 Asegúrate de tener instalado:  
 - **Node.js 20+**  
 - **NPM o Yarn**  
 - **Git**  
 
-### **2️⃣ Clonar el repositorio**  
+### **2. Clonar el repositorio**  
 ```bash  
 git clone https://github.com/Dastyb/contact-center.git  
 cd contact-center  
 ```
 
-### **3️⃣ Instalar dependencias**  
+### **3. Instalar dependencias**  
 ```bash  
 npm install  
 ```
 
-### **4️⃣ Configurar variables de entorno**  
+### **4. Configurar variables de entorno**  
 Crea un archivo `.env` en la raíz del proyecto con:  
 ```ini  
 NEXT_PUBLIC_API_URL=/api/simulate  
 ```
 Esto asegura que la aplicación consuma la API simulada de WebSockets.
 
-### **5️⃣ Ejecutar el proyecto**  
+### **5. Ejecutar el proyecto**  
 ```bash  
 npm run dev  
 ```
@@ -48,12 +48,12 @@ Abre [http://localhost:3000](http://localhost:3000) en tu navegador.
 ## ¿Cómo Funciona la Actualización en Tiempo Real?  
 La aplicación **simula un servidor WebSocket** sin necesidad de un backend real.  
 
-1️⃣ **Al abrir la app**, los datos iniciales se obtienen desde `/api/simulate`.  
-2️⃣ **Cada 10 segundos**, el sistema consulta nuevamente `/api/simulate` y genera cambios dinámicos:  
+1. **Al abrir la app**, los datos iniciales se obtienen desde `/api/simulate`.  
+2. **Cada 10 segundos**, el sistema consulta nuevamente `/api/simulate` y genera cambios dinámicos:  
    - Agentes cambian de estado (Disponible, En Llamada, Pausa).  
    - Clientes actualizan su tiempo de espera.  
-3️⃣ **Estos cambios se envían a la interfaz** a través de WebSockets simulados.  
-4️⃣ **La lista de agentes y clientes se actualiza automáticamente**, sin necesidad de recargar la página.  
+3. **Estos cambios se envían a la interfaz** a través de WebSockets simulados.  
+4. **La lista de agentes y clientes se actualiza automáticamente**, sin necesidad de recargar la página.  
 
 **Resultado:** Un sistema que **simula eventos en tiempo real** de manera eficiente. 
 
@@ -100,15 +100,15 @@ La aplicación **simula un servidor WebSocket** sin necesidad de un backend real
 ## ¿Cómo cambiar a una API real?  
 Si en algún momento se proporciona un backend real con WebSockets, solo hay que seguir estos pasos:  
 
-1️⃣ **Editar el `.env`** y cambiar la URL de la API real:  
+1. **Editar el `.env`** y cambiar la URL de la API real:  
    ```ini  
    NEXT_PUBLIC_API_URL=https://api.example-contact.com  
    ```  
-2️⃣ **Verificar que `api.ts` use la variable de entorno**  
+2. **Verificar que `api.ts` use la variable de entorno**  
    ```typescript  
    const API_URL = process.env.NEXT_PUBLIC_API_URL;  
    ```  
-3️⃣ **Reiniciar el servidor**  
+3. **Reiniciar el servidor**  
    ```bash  
    npm run dev  
    ```  
