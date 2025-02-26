@@ -86,13 +86,8 @@ La aplicación **simula un servidor WebSocket** sin necesidad de un backend real
 │   ├── api.ts   # Llamadas a la API simulada  
 │   ├── socket.ts # Simulación de WebSockets  
 │  
-├── /hooks        # Hooks personalizados  
-│   ├── useWebSocket.ts # Hook para eventos en tiempo real  
-│  
-├── /styles       # Configuración de Tailwind  
-│   ├── globals.css  
-│  
-└── /utils        # Funciones auxiliares  
+└── /hooks        # Hooks personalizados  
+   ├── useWebSocket.ts # Hook para eventos en tiempo real   
 ```
 
 ---
