@@ -1,36 +1,148 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Contact Center Dashboard  
+Este proyecto es un **dashboard en tiempo real de un contact center** para gestionar agentes y clientes. La aplicación muestra la lista de agentes con sus estados y el tiempo de espera de los clientes, y **actualiza los datos dinámicamente** gracias a una simulación de WebSockets.  
 
-## Getting Started
+**Tecnologías utilizadas:**  
+- **Next.js** (App Router, SSR/CSR)  
+- **React Hooks** (`useState`, `useEffect`, `useContext`)  
+- **Context API** (Manejo de estado global)  
+- **Axios** (Consumo de API)  
+- **WebSockets simulados** (Actualización automática cada 10s)  
+- **Tailwind CSS** (Estilos modernos y responsivos)  
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Instalación y Configuración  
+
+### **1️⃣ Requisitos previos**  
+Asegúrate de tener instalado:  
+- **Node.js 20+**  
+- **NPM o Yarn**  
+- **Git**  
+
+### **2️⃣ Clonar el repositorio**  
+```bash  
+git clone https://github.com/Dastyb/contact-center.git  
+cd contact-center  
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### **3️⃣ Instalar dependencias**  
+```bash  
+npm install  
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### **4️⃣ Configurar variables de entorno**  
+Crea un archivo `.env` en la raíz del proyecto con:  
+```ini  
+NEXT_PUBLIC_API_URL=/api/simulate  
+```
+Esto asegura que la aplicación consuma la API simulada de WebSockets.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### **5️⃣ Ejecutar el proyecto**  
+```bash  
+npm run dev  
+```
+Abre [http://localhost:3000](http://localhost:3000) en tu navegador.
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## ¿Cómo Funciona la Actualización en Tiempo Real?  
+La aplicación **simula un servidor WebSocket** sin necesidad de un backend real.  
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1️⃣ **Al abrir la app**, los datos iniciales se obtienen desde `/api/simulate`.  
+2️⃣ **Cada 10 segundos**, el sistema consulta nuevamente `/api/simulate` y genera cambios dinámicos:  
+   - Agentes cambian de estado (Disponible, En Llamada, Pausa).  
+   - Clientes actualizan su tiempo de espera.  
+3️⃣ **Estos cambios se envían a la interfaz** a través de WebSockets simulados.  
+4️⃣ **La lista de agentes y clientes se actualiza automáticamente**, sin necesidad de recargar la página.  
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+**Resultado:** Un sistema que **simula eventos en tiempo real** de manera eficiente. 
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Estructura del Proyecto  
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+/src  
+├── /app          # Rutas y páginas principales  
+│   ├── /agentes  # Página de agentes  
+│   ├── /clientes # Página de clientes  
+│   ├── layout.tsx # Estructura general  
+│   ├── page.tsx  # Página de inicio  
+│  
+├── /api          # Simulación de API en Next.js  
+│   ├── simulate.ts # Endpoint que genera datos dinámicos  
+│  
+├── /components   # Componentes reutilizables  
+│   ├── AgentCard.tsx  
+│   ├── ClientCard.tsx  
+│   ├── FilterBar.tsx  
+│   ├── Loading.tsx  
+│   ├── ErrorMessage.tsx  
+│  
+├── /context      # Estado global con Context API  
+│   ├── AppContext.tsx  
+│  
+├── /services     # Conexión con la API y WebSockets  
+│   ├── api.ts   # Llamadas a la API simulada  
+│   ├── socket.ts # Simulación de WebSockets  
+│  
+├── /hooks        # Hooks personalizados  
+│   ├── useWebSocket.ts # Hook para eventos en tiempo real  
+│  
+├── /styles       # Configuración de Tailwind  
+│   ├── globals.css  
+│  
+└── /utils        # Funciones auxiliares  
+```
+
+---
+
+## ¿Cómo cambiar a una API real?  
+Si en algún momento se proporciona un backend real con WebSockets, solo hay que seguir estos pasos:  
+
+1️⃣ **Editar el `.env`** y cambiar la URL de la API real:  
+   ```ini  
+   NEXT_PUBLIC_API_URL=https://api.example-contact.com  
+   ```  
+2️⃣ **Verificar que `api.ts` use la variable de entorno**  
+   ```typescript  
+   const API_URL = process.env.NEXT_PUBLIC_API_URL;  
+   ```  
+3️⃣ **Reiniciar el servidor**  
+   ```bash  
+   npm run dev  
+   ```  
+
+**¡Y listo!** La aplicación comenzará a recibir datos en tiempo real desde la API real.  
+
+---
+
+## Contribución  
+Si quieres mejorar la aplicación o reportar algún problema:  
+1. **Fork** el repositorio.  
+2. Crea una rama con tus cambios:  
+   ```bash  
+   git checkout -b nueva-funcionalidad  
+   ```  
+3. **Haz commit y push:**  
+   ```bash  
+   git commit -m "Agregué X funcionalidad"  
+   git push origin nueva-funcionalidad  
+   ```  
+4. Abre un **Pull Request** en GitHub.
+
+---
+
+**Características Clave:**  
+ - Manejo de datos dinámicos sin backend real.  
+ - Simulación de WebSockets con `/api/simulate`.  
+ - Listas actualizadas automáticamente sin recargar la página.  
+ - Arquitectura lista para conectarse a un backend real.  
+
+Si tienes alguna duda o sugerencia, **contáctame** 😃.  
+
+---
+
+### **¿Listo para ejecutar?**  
+```bash  
+npm run dev  
